@@ -37,5 +37,5 @@ export default function AdminRestaurantes() {
         </TableBody>
       </Table>
     </TableContainer>
-  );
+  )
 }
