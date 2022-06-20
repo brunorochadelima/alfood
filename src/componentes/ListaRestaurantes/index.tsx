@@ -27,7 +27,6 @@ const ListaRestaurantes = () => {
     })
     .catch(error => {console.log(error)})
   }
-
   
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>
