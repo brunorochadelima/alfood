@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useState } from "react";
 import { IPaginacao } from "../../interfaces/IPaginacao";
@@ -17,6 +17,7 @@ const ListaRestaurantes = () => {
   const [proximaPagina, setProximaPagina] = useState("");
   const [paginaAnterior, setPaginaAnterior] = useState("");
   const [busca, setBusca] = useState("");
+  const [ordenar, setOrdenar] = useState("");
 
   // agora, o carregarDados recebe opcionalmente as opções de configuração do axios
   function carregarDados(url: string, opcoes: AxiosRequestConfig = {}) {
@@ -41,6 +42,9 @@ const ListaRestaurantes = () => {
     if (busca) {
       opcoes.params.search = busca;
     }
+    if(ordenar) {
+      opcoes.params.ordering = ordenar;
+    }
     carregarDados("http://localhost:8000/api/v1/restaurantes/", opcoes);
   }
 
@@ -49,7 +53,6 @@ const ListaRestaurantes = () => {
     carregarDados("http://localhost:8000/api/v1/restaurantes/");
   }, []);
 
-
   return (
     <section className={style.ListaRestaurantes}>
       <h1>
@@ -57,24 +60,46 @@ const ListaRestaurantes = () => {
       </h1>
       <form onSubmit={buscar}>
         <TextField
+           sx={{mb: 3}}
           label="Buscar Restaurante"
           variant="standard"
           value={busca}
           onChange={(evento) => setBusca(evento.target.value)}
         />
-        <Button type="submit" variant="outlined">Buscar</Button>
+
+         <InputLabel id="ordenar">Ordenar por</InputLabel>
+        <Select variant="standard" sx={{ minWidth: 150, mr: 2 }}
+          labelId="ordenar"
+          value={ordenar}
+          label="Age"
+          onChange={evento => setOrdenar(evento.target.value)}
+        >
+          <MenuItem value={''}>Padrão</MenuItem>
+          <MenuItem value={'id'}>Por ID</MenuItem>
+          <MenuItem value={'nome'}>Por Nome</MenuItem>
+        </Select>
+
+        <Button type="submit" variant="outlined">
+          Buscar
+        </Button>
+
       </form>
+      
+            
+
       {restaurantes?.map((item) => (
         <Restaurante restaurante={item} key={item.id} />
-      ))}<br/>
+      ))}
+      <br />
       {
-        <Button style={{marginRight: "1rem"}}
+        <Button
+          style={{ marginRight: "1rem" }}
           variant="contained"
           onClick={() => carregarDados(paginaAnterior)}
           disabled={!paginaAnterior}
         >
           Página Anterior
-        </Button> 
+        </Button>
       }
       {
         <Button
