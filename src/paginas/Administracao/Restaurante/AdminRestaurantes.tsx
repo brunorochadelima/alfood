@@ -8,9 +8,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import api from "../../../api/api";
 import IRestaurante from "../../../interfaces/IRestaurante";
 
 export default function AdminRestaurantes() {
@@ -18,13 +18,13 @@ export default function AdminRestaurantes() {
 
   
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/v2/restaurantes/")
+    api
+      .get("restaurantes/")
       .then((response) => setRestaurantes(response.data));
   }, []);
 
   function excluir(restauranteAhSerExcluido: IRestaurante) {
-    axios.delete(`http://localhost:8000/api/v2/restaurantes/${restauranteAhSerExcluido.id}/`)
+    api.delete(`restaurantes/${restauranteAhSerExcluido.id}/`)
     .then(() => {
       const listaRestaurantes = restaurantes.filter(restaurante => restaurante.id !== restauranteAhSerExcluido.id)
       setRestaurantes(listaRestaurantes)
