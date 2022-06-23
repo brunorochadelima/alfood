@@ -1,9 +1,19 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import axios from "axios";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Link,
+  Paper,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../../api/api";
 import IRestaurante from "../../../interfaces/IRestaurante";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function FormRestaurante() {
   const [nomeRestaurante, setNomeRestaurante] = useState("");
@@ -12,9 +22,7 @@ export default function FormRestaurante() {
   useEffect(() => {
     if (parametros.id) {
       api
-        .get<IRestaurante>(
-          `restaurantes/${parametros.id}/`
-        )
+        .get<IRestaurante>(`restaurantes/${parametros.id}/`)
         .then((response) => setNomeRestaurante(response.data.nome));
     }
   }, [parametros.id]);
@@ -42,21 +50,21 @@ export default function FormRestaurante() {
   }
 
   return (
-    <Container sx={{ marginTop: 2 }}>
-      <Typography component='h1'>Formulário de Restaurante</Typography>
-    <Box component="form" onSubmit={aoSubmeterForm}>
-      <TextField
-        value={nomeRestaurante}
-        onChange={(evento) => setNomeRestaurante(evento.target.value)}
-        label="Nome do restaurante"
-        variant="standard"
-        fullWidth
-        required
-      />
-      <Button sx={{marginTop: 2}} variant="outlined" type="submit">
-        Salvar
-      </Button>
-    </Box>
-    </Container>
+    <>
+          <Typography component="h1">Formulário de Restaurante</Typography>
+          <Box component="form" onSubmit={aoSubmeterForm}>
+            <TextField
+              value={nomeRestaurante}
+              onChange={(evento) => setNomeRestaurante(evento.target.value)}
+              label="Nome do restaurante"
+              variant="standard"
+              fullWidth
+              required
+            />
+            <Button sx={{ marginTop: 2 }} variant="outlined" type="submit">
+              Salvar
+            </Button>
+          </Box>
+    </>
   );
 }
