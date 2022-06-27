@@ -32,6 +32,35 @@ export default function FormPrato() {
 
   function aoSubmeterForm(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+
+    const formData = new FormData();
+    formData.append('nome', nomePrato)
+    formData.append('descricao', descricaoPrato)
+    formData.append('tag', tag)
+    formData.append('restaurante', restaurante)
+
+    if(imagem) {
+      formData.append('imagem', imagem)
+    }
+
+    api.request({
+      url: 'pratos/',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: formData,
+    })
+    .then(() => {
+      setNomePrato("")
+      setDescricaoPrato("")
+      setTag("")
+      setRestaurante("")
+
+       alert('Pratos Cadastrado com sucesso')
+    })
+    .catch(erro => console.error(erro))
+
   }
 
   function selecionarArquivo(evento: React.ChangeEvent<HTMLInputElement>) {
@@ -67,7 +96,7 @@ export default function FormPrato() {
         <FormControl fullWidth margin="dense">
          <InputLabel id="tag">Tag</InputLabel>
          <Select labelId="tag" value={tag} onChange={(evento) => setTag(evento.target.value)}>
-           {tags.map((tag) => <MenuItem key={tag.id} value={tag.id}>{tag.value}</MenuItem>)}
+           {tags.map((tag) => <MenuItem key={tag.id} value={tag.value}>{tag.value}</MenuItem>)}
          </Select>
         </FormControl>
 
