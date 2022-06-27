@@ -21,6 +21,7 @@ export default function FormPrato() {
   const [tag, setTag] = useState("")
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([])
   const [restaurante, setRestaurante] = useState("")
+  const [imagem, setImagem] = useState<File | null> (null)
 
   useEffect(() => {
    api.get<{ tags: ITag[]}>('tags/')
@@ -31,6 +32,14 @@ export default function FormPrato() {
 
   function aoSubmeterForm(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+  }
+
+  function selecionarArquivo(evento: React.ChangeEvent<HTMLInputElement>) {
+     if(evento.target.files?.length) {
+       setImagem(evento.target.files[0])
+     } else {
+      setImagem(null)
+     }
   }
 
   return (
@@ -68,6 +77,8 @@ export default function FormPrato() {
            {restaurantes.map((restaurante) => <MenuItem key={restaurante.id} value={restaurante.id}>{restaurante.nome}</MenuItem>)}
          </Select>
         </FormControl>
+
+        <input type="file" onChange={selecionarArquivo}/>
 
         <Button sx={{ marginTop: 2 }} variant="outlined" type="submit">
           Salvar
