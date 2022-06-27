@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect} from "react";
 import api from "../../../../api/api";
+import IRestaurante from "../../../../interfaces/IRestaurante";
 import ITag from "../../../../interfaces/ITag";
 
 
@@ -18,10 +19,14 @@ export default function FormPrato() {
   const [descricaoPrato, setDescricaoPrato] = useState("");
   const [tags, setTags] = useState<ITag[]>([]);
   const [tag, setTag] = useState("")
+  const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([])
+  const [restaurante, setRestaurante] = useState("")
 
   useEffect(() => {
    api.get<{ tags: ITag[]}>('tags/')
    .then(resposta => setTags(resposta.data.tags))
+   api.get<IRestaurante[]>('restaurantes/')
+   .then(resposta => setRestaurantes(resposta.data))
   }, [])
 
   function aoSubmeterForm(evento: React.FormEvent<HTMLFormElement>) {
@@ -54,6 +59,13 @@ export default function FormPrato() {
          <InputLabel id="tag">Tag</InputLabel>
          <Select labelId="tag" value={tag} onChange={(evento) => setTag(evento.target.value)}>
            {tags.map((tag) => <MenuItem key={tag.id} value={tag.id}>{tag.value}</MenuItem>)}
+         </Select>
+        </FormControl>
+
+        <FormControl fullWidth margin="dense">
+         <InputLabel id="restaurante">Nome do Restaurante</InputLabel>
+         <Select labelId="restaurante" value={restaurante} onChange={(evento) => setRestaurante(evento.target.value)}>
+           {restaurantes.map((restaurante) => <MenuItem key={restaurante.id} value={restaurante.id}>{restaurante.nome}</MenuItem>)}
          </Select>
         </FormControl>
 
